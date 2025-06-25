@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RingFit Pro - Entrenamiento en Anillas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --accent: #f59e0b;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--gradient);
+            color: white;
+            padding: 120px 2rem 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-50%) translateY(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) translateY(-50%) rotate(360deg); }
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: slideInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            animation: slideInUp 1s ease-out 0.6s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Plan Section */
+        .plan-container {
+            background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plan-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .tab-button {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab-button.active {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .exercise-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .exercise-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .exercise-name {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .exercise-details {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Timer Section */
+        .timer-container {
+            background: var(--gradient);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .timer-display {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .timer-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .timer-btn:hover {
+            background: white;
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-3px) scale(1.1);
+            background: var(--accent);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section {
+                padding: 60px 1rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timer-display {
+                font-size: 2.5rem;
+            }
+
+            .plan-container {
+                padding: 2rem 1rem;
+            }
+        }
+
+        /* Scroll animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+
+        .scroll-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                🏋️ RingFit Pro
+            </div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#niveles">Niveles</a></li>
+                <li><a href="#plan">Plan de Entrenamiento</a></li>
+                <li><a href="#timer">Timer</a></li>
+                <li><a href="#tips">Consejos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <h1>Domina las Anillas de Gimnasia</h1>
+            <p>Desarrolla fuerza funcional, control corporal y estabilidad con nuestro sistema de entrenamiento progresivo en anillas gimnásticas.</p>
+            <a href="#plan" class="cta-button">Comenzar Entrenamiento</a>
+        </div>
+    </section>
+
+    <section class="section scroll-reveal" id="niveles">
+        <h2>Niveles de Entrenamiento</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">🥉</div>
+                <h3>Principiante</h3>
+                <p>Ideal para quienes empiezan con anillas. Enfoque en estabilidad básica, support holds y movimientos fundamentales con progresiones suaves.</p>
+                <ul style="margin-top: 1rem; padding-left: 1rem;">
+                    <li>Support Hold (10-30s)</li>
+                    <li>Ring Push-ups inclinados</li>
+                    <li>Ring Rows básicos</li>
+                    <li>Tucked L-sit</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-icon">🥈</div>
+                <h3>Intermedio</h3>
+                <p>Para atletas con base sólida. Introducción a movimientos dinámicos avanzados y holds estáticos más desafiantes.</p>
+                <ul style="margin-top: 1rem; padding-left: 1rem;">
+                    <li>Ring Dips completos</li>
+                    <li>L-sit (15-30s)</li>
+                    <li>Muscle-up progresiones</li>
+                    <li>Tucked Front Lever</li>
+                </ul>
+            </div>
+            <div class="card">
+                <div class="card-icon">🥇</div>
+                <h3>Avanzado</h3>
+                <p>Dominio completo de anillas. Movimientos de alta dificultad, combinaciones fluidas y elementos de competición.</p>
+                <ul style="margin-top: 1rem; padding-left: 1rem;">
+                    <li>Iron Cross progresiones</li>
+                    <li>Front/Back Lever completos</li>
+                    <li>Muscle-ups múltiples</li>
+                    <li>Maltese progresiones</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section scroll-reveal" id="plan">
+        <h2>Plan de Entrenamiento Intermedio</h2>
+        <div class="plan-container">
+            <div class="plan-tabs">
+                <button class="tab-button active" onclick="showTab('dia-a')">Día A - Empuje</button>
+                <button class="tab-button" onclick="showTab('dia-b')">Día B - Tracción</button>
+                <button class="tab-button" onclick="showTab('dia-c')">Día C - Combos</button>
+                <button class="tab-button" onclick="showTab('calentamiento')">Calentamiento</button>
+            </div>
+
+            <div id="dia-a" class="tab-content active">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">Día A - Fuerza de Empuje</h3>
+                <div class="exercise-list">
+                    <div class="exercise-item">
+                        <div class="exercise-name">Ring Push-ups</div>
+                        <div class="exercise-details">4 series × 6-10 repeticiones | Progresión: Pies elevados o archer push-ups</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Ring Dips</div>
+                        <div class="exercise-details">4 series × 5-8 repeticiones | Con asistencia de banda si es necesario</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">L-Sit Hold</div>
+                        <div class="exercise-details">5 series × 10-20 segundos | Progresión: Tucked → Advanced tuck → Full</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Support Hold (RTO)</div>
+                        <div class="exercise-details">3 series × 30-45 segundos | Anillas giradas hacia afuera</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dia-b" class="tab-content">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">Día B - Fuerza de Tracción</h3>
+                <div class="exercise-list">
+                    <div class="exercise-item">
+                        <div class="exercise-name">Ring Pull-ups</div>
+                        <div class="exercise-details">4 series × 5-8 repeticiones | Progresión: Wide grip, commando pull-ups</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Ring Rows</div>
+                        <div class="exercise-details">4 series × 8-12 repeticiones | Más horizontal para mayor dificultad</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Muscle-up Transition</div>
+                        <div class="exercise-details">4 series × 3-5 repeticiones | Falsos grip pull-ups, transiciones asistidas</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Skin the Cat</div>
+                        <div class="exercise-details">3 series × 3-5 repeticiones | Control total del movimiento</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="dia-c" class="tab-content">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">Día C - Combinaciones</h3>
+                <div class="exercise-list">
+                    <div class="exercise-item">
+                        <div class="exercise-name">Secuencia de Transiciones</div>
+                        <div class="exercise-details">Support → L-sit → Support → Dip → Support | 3 series × 3-5 repeticiones</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Ring Archer Push-ups</div>
+                        <div class="exercise-details">4 series × 4-6 por lado | Alternando lados</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Tucked Front Lever</div>
+                        <div class="exercise-details">5 series × 5-15 segundos | Progresión hacia advanced tuck</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Ring Bulgarian Split Squats</div>
+                        <div class="exercise-details">3 series × 8-10 por pierna | Pie trasero en anilla</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="calentamiento" class="tab-content">
+                <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">Calentamiento (10-15 min)</h3>
+                <div class="exercise-list">
+                    <div class="exercise-item">
+                        <div class="exercise-name">Movilidad Articular</div>
+                        <div class="exercise-details">Círculos de brazos, muñecas y hombros | 2 minutos</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Hollow Body Hold</div>
+                        <div class="exercise-details">3 series × 30 segundos | Activación del core</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Support Hold</div>
+                        <div class="exercise-details">3 series × 20-30 segundos | Preparación específica</div>
+                    </div>
+                    <div class="exercise-item">
+                        <div class="exercise-name">Ring Rows ligeros</div>
+                        <div class="exercise-details">2 series × 10-12 repeticiones | Activación muscular</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section scroll-reveal" id="timer">
+        <h2>Timer de Entrenamiento</h2>
+        <div class="timer-container">
+            <h3>Timer Personalizable</h3>
+            <div class="timer-display" id="timerDisplay">00:00</div>
+            <div class="timer-controls">
+                <button class="timer-btn" onclick="setTimer(30)">30s</button>
+                <button class="timer-btn" onclick="setTimer(60)">1min</button>
+                <button class="timer-btn" onclick="setTimer(120)">2min</button>
+                <button class="timer-btn" onclick="startTimer()">▶️ Iniciar</button>
+                <button class="timer-btn" onclick="pauseTimer()">⏸️ Pausar</button>
+                <button class="timer-btn" onclick="resetTimer()">🔄 Reset</button>
+            </div>
+            <div style="margin-top: 1rem;">
+                <input type="number" id="customTime" placeholder="Segundos" style="padding: 0.5rem; border-radius: 10px; border: none; margin-right: 1rem;">
+                <button class="timer-btn" onclick="setCustomTimer()">Timer Personalizado</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section scroll-reveal" id="tips">
+        <h2>Consejos Esenciales</h2>
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">⚠️</div>
+                <h3>Seguridad Primero</h3>
+                <p>Siempre revisa la instalación de las anillas. Altura mínima de 2.5-3 metros. Usa colchonetas de protección y no entrenes movimientos avanzados sin supervisión.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🎯</div>
+                <h3>Técnica Perfecta</h3>
+                <p>Mantén siempre el core activado. Control total en fase excéntrica. RTO (rings turned out) en support positions. Falso grip para muscle-ups y front levers.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">💪</div>
+                <h3>Progresión Gradual</h3>
+                <p>Completa todas las series con buena forma antes de progresar. Mantén holds estáticos por el tiempo objetivo. Escucha a tu cuerpo y evita el dolor articular.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔄</div>
+                <h3>Recuperación</h3>
+                <p>Hidratación adecuada, sueño de calidad (7-9 horas), nutrición balanceada. Mínimo 48 horas de descanso entre sesiones intensas de anillas.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <h3>RingFit Pro</h3>
+            <p>Desarrolla tu potencial máximo con entrenamiento en anillas de gimnasia</p>
+            <div class="social-links">
+                <a href="#">📧</a>
+                <a href="#">📱</a>
+                <a href="#">🌐</a>
+            </div>
+            <p style="margin-top: 2rem; opacity: 0.7;">&copy; 2025 RingFit Pro. Entrena inteligente, entrena seguro.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Timer functionality
+        let timerInterval;
+        let currentTime = 0;
+        let isRunning = false;
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateDisplay() {
+            document.getElementById('timerDisplay').textContent = formatTime(currentTime);
+        }
+
+        function setTimer(seconds) {
+            currentTime = seconds;
+            updateDisplay();
+            if (isRunning) {
+                pauseTimer();
+            }
+        }
+
+        function setCustomTimer() {
+            const customTime = parseInt(document.getElementById('customTime').value);
+            if (customTime && customTime > 0) {
+                setTimer(customTime);
+            }
+        }
+
+        function startTimer() {
+            if (!isRunning && currentTime > 0) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    currentTime--;
+                    updateDisplay();
+                    if (currentTime <= 0) {
+                        pauseTimer();
+                        alert('¡Tiempo completado! 🎉');
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            currentTime = 0;
+            updateDisplay();
+        }
+
+        // Tab functionality
+        function showTab(tabId) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Scroll animations
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.scroll-reveal');
+            reveals.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('revealed');
+                }
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Event listeners
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // Initialize timer display
+        updateDisplay();
+    </script>
+</body>
+</html>
